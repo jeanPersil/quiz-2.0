@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/paginas/tela_inicial.dart';
-
+import 'package:quiz/paginas/telaQuizz.dart';
 
 void main() {
   runApp(Myapp());

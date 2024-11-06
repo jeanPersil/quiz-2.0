@@ -30,10 +30,13 @@ class TelaInicial extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => Telaquiz()),
                 );
               },
-              style: TextButton.styleFrom(backgroundColor: Colors.white),
+              style: TextButton.styleFrom(backgroundColor: Colors.deepPurple),
               child: Text(
                 'COMEÇAR!',
-                style: TextStyle(color: Colors.black, fontSize: 30),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 3,
+                    color: Colors.white),
               ))
         ],
       )),
