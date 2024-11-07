@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/models/modeloQuestoes.dart';
 import 'package:quiz/widgets/questoes_widgets.dart';
-import 'package:quiz/widgets/botaoNext.dart';
 import 'package:quiz/widgets/opcoes.dart';
+import 'package:quiz/widgets/OpcoesTeste.dart';
 
 class Telaquiz extends StatefulWidget {
   @override
@@ -32,7 +32,9 @@ class _TelaquizState extends State<Telaquiz> {
   ];
 
   int indexQuestao = 0;
+  int pontuacao = 0;
   bool foiPressionado = false;
+  bool Questao_respondida = false;
 
   void proximaQuestao() {
     if (indexQuestao == questoes.length - 1) {
@@ -42,18 +44,27 @@ class _TelaquizState extends State<Telaquiz> {
         setState(() {
           indexQuestao++;
           foiPressionado = false;
+          Questao_respondida = false;
         });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: const Text("Por favor, selecione uma das opcoes acima")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Por favor, selecione uma das opcoes acima")));
       }
     }
   }
 
-  void escolher_cor() {
-    setState(() {
-      foiPressionado = true;
-    });
+  void verificandoResposta(bool valor) {
+    if (Questao_respondida) {
+      return;
+    } else {
+      if (valor == true) {
+        pontuacao++;
+        setState(() {
+          foiPressionado = true;
+          Questao_respondida = true;
+        });
+      }
+    }
   }
 
   @override
@@ -62,6 +73,15 @@ class _TelaquizState extends State<Telaquiz> {
       backgroundColor: Colors.lightBlue,
       appBar: AppBar(
         title: const Text('Quizz'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Pontuação: $pontuacao",
+              style: TextStyle(fontSize: 18),
+            ),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -76,14 +96,12 @@ class _TelaquizState extends State<Telaquiz> {
             ),
             const SizedBox(height: 25),
             for (int i = 0; i < questoes[indexQuestao].opcoes.length; i++)
-              Card_de_opcoes(
-                  opcao: questoes[indexQuestao].opcoes.keys.toList()[i],
-                  cor: foiPressionado
-                      ? questoes[indexQuestao].opcoes.values.toList()[i] == true
-                          ? Colors.green
-                          : Colors.red
-                      : Colors.white,
-                  botaoPressionado: escolher_cor),
+              Card_de_opcoes_teste(
+                opcao: questoes[indexQuestao].opcoes.keys.toList()[i],
+                respostaCorreta:
+                    questoes[indexQuestao].opcoes.values.toList()[i],
+                pontuacao: pontuacao,
+              ),
           ],
         ),
       ),

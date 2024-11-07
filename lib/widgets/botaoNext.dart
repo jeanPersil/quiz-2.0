@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/paginas/telaQuizz.dart';
 
-
 class Botaonext extends StatelessWidget {
   const Botaonext({super.key, required this.proximaQuestao});
 
