@@ -17,7 +17,6 @@ class Card_de_opcoes_teste extends StatefulWidget {
 
 class _Card_de_opcoes_testeState extends State<Card_de_opcoes_teste> {
   bool clicado = false;
-  
 
   @override
   Widget build(BuildContext context) {

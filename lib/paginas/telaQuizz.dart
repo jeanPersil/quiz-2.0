@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/models/modeloQuestoes.dart';
+import 'package:quiz/paginas/telaResultado.dart';
 import 'package:quiz/widgets/questoes_widgets.dart';
-import 'package:quiz/widgets/opcoes.dart';
-import 'package:quiz/widgets/OpcoesTeste.dart';
 
 class Telaquiz extends StatefulWidget {
   @override
@@ -34,35 +33,22 @@ class _TelaquizState extends State<Telaquiz> {
   int indexQuestao = 0;
   int pontuacao = 0;
   bool foiPressionado = false;
-  bool Questao_respondida = false;
 
   void proximaQuestao() {
     if (indexQuestao == questoes.length - 1) {
-      return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Telaresultado()),
+      );
     } else {
       if (foiPressionado) {
         setState(() {
           indexQuestao++;
           foiPressionado = false;
-          Questao_respondida = false;
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Por favor, selecione uma das opcoes acima")));
-      }
-    }
-  }
-
-  void verificandoResposta(bool valor) {
-    if (Questao_respondida) {
-      return;
-    } else {
-      if (valor == true) {
-        pontuacao++;
-        setState(() {
-          foiPressionado = true;
-          Questao_respondida = true;
-        });
       }
     }
   }
@@ -96,12 +82,36 @@ class _TelaquizState extends State<Telaquiz> {
             ),
             const SizedBox(height: 25),
             for (int i = 0; i < questoes[indexQuestao].opcoes.length; i++)
-              Card_de_opcoes_teste(
-                opcao: questoes[indexQuestao].opcoes.keys.toList()[i],
-                respostaCorreta:
-                    questoes[indexQuestao].opcoes.values.toList()[i],
-                pontuacao: pontuacao,
-              ),
+              ListTile(
+                  title: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (foiPressionado) {
+                            return;
+                          }
+                          foiPressionado = true;
+                          if (questoes[indexQuestao]
+                                  .opcoes
+                                  .values
+                                  .toList()[i] ==
+                              true) {
+                            pontuacao++;
+                          }
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: foiPressionado
+                              ? (questoes[indexQuestao]
+                                      .opcoes
+                                      .values
+                                      .toList()[i]
+                                  ? Colors.green
+                                  : Colors.red)
+                              : Colors.white),
+                      child: Text(
+                        questoes[indexQuestao].opcoes.keys.toList()[i],
+                        style: const TextStyle(fontSize: 20),
+                      )))
           ],
         ),
       ),

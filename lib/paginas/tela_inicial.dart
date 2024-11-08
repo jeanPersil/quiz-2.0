@@ -22,7 +22,7 @@ class TelaInicial extends StatelessWidget {
             height: 350,
             width: 350,
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           TextButton(
               onPressed: () {
                 Navigator.push(
@@ -31,7 +31,7 @@ class TelaInicial extends StatelessWidget {
                 );
               },
               style: TextButton.styleFrom(backgroundColor: Colors.deepPurple),
-              child: Text(
+              child: const Text(
                 'COMEÇAR!',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
