@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quiz/main.dart';
 import 'package:quiz/paginas/telaQuizz.dart';
 
 class TelaInicial extends StatelessWidget {
@@ -9,7 +8,7 @@ class TelaInicial extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Top 10 quiz BR'),
+        title: const Text('Top 10 quiz BR'),
         centerTitle: true,
       ),
       backgroundColor: Colors.lightBlue,

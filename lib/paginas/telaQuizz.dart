@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/models/modeloQuestoes.dart';
 import 'package:quiz/paginas/telaResultado.dart';
-import 'package:quiz/widgets/questoes_widgets.dart';
+import 'package:quiz/widgets/TelaQuiz_barraProgressao.dart';
+import 'package:quiz/widgets/TelaQuiz_questoes_widgets.dart';
 
 class Telaquiz extends StatefulWidget {
   @override
@@ -10,35 +11,54 @@ class Telaquiz extends StatefulWidget {
 
 class _TelaquizState extends State<Telaquiz> {
   List<Questoes> questoes = [
-    Questoes(id: '1', titulo: 'Quanto é 10 + 10', opcoes: {
-      '10': true,
-      '5': false,
-      '2': false,
-      '0': false,
+    Questoes(titulo: 'Quem é o ultimo boss de dark souls 3?', opcoes: {
+      'Lotric': false,
+      'Vordit': false,
+      'Soul of Sinder': true,
+      'Gael': false,
     }),
-    Questoes(id: '2', titulo: 'Quanto é 15 + 10', opcoes: {
-      '10': false,
-      '25': true,
-      '2': false,
-      '0': false,
+    Questoes(
+        titulo:
+            'Qual é a maneira correta de declara uma variavel do tipo INTEIRA no flutter?',
+        opcoes: {
+          'int variavel': true,
+          'Int variavel': false,
+          'var variavel': false,
+          'String varivael': false,
+        }),
+    Questoes(titulo: 'Qual é a capital do brasil?', opcoes: {
+      'Salvador': false,
+      'Pernambuco': false,
+      'Brasilia': true,
+      'Estados Unidos': false,
     }),
-    Questoes(id: '3', titulo: 'Quanto é 10 + 1', opcoes: {
-      '11': true,
-      '5': false,
-      '2': false,
-      '0': false,
-    })
+    Questoes(titulo: 'Qual foi o ano da ultima copa do mundo? ', opcoes: {
+      '2022': true,
+      '2018': false,
+      '2014': false,
+      '2020': false,
+    }),
+    Questoes(
+        titulo:
+            'A pessoa que usa tema CLARO no Vscode / discord é deveria estar em um Hospicio.',
+        opcoes: {
+          'VERDADEIRO': true,
+          'FALSO': false,
+        })
   ];
 
   int indexQuestao = 0;
-  int pontuacao = 0;
+  double pontuacao = 0;
+  double erros = 0;
   bool foiPressionado = false;
 
   void proximaQuestao() {
     if (indexQuestao == questoes.length - 1) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Telaresultado()),
+        MaterialPageRoute(
+            builder: (context) =>
+                Telaresultado(acertos: pontuacao, erros: erros)),
       );
     } else {
       if (foiPressionado) {
@@ -58,13 +78,14 @@ class _TelaquizState extends State<Telaquiz> {
     return Scaffold(
       backgroundColor: Colors.lightBlue,
       appBar: AppBar(
-        title: const Text('Quizz'),
+        title: const Text('Quiz'),
+        centerTitle: true,
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Pontuação: $pontuacao",
-              style: TextStyle(fontSize: 18),
+              "Acertos: ${pontuacao.toInt()}",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
           )
         ],
@@ -73,6 +94,12 @@ class _TelaquizState extends State<Telaquiz> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: BarradeProgressao(
+                  posicaoQuestao: indexQuestao + 1,
+                  tamanhoLista: questoes.length),
+            ),
             QuestoesWidgets(
                 index: indexQuestao,
                 questao: questoes[indexQuestao].titulo,
@@ -96,6 +123,8 @@ class _TelaquizState extends State<Telaquiz> {
                                   .toList()[i] ==
                               true) {
                             pontuacao++;
+                          } else {
+                            erros++;
                           }
                         });
                       },
@@ -110,7 +139,8 @@ class _TelaquizState extends State<Telaquiz> {
                               : Colors.white),
                       child: Text(
                         questoes[indexQuestao].opcoes.keys.toList()[i],
-                        style: const TextStyle(fontSize: 20),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.black),
                       )))
           ],
         ),

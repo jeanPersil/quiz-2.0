@@ -16,8 +16,8 @@ class QuestoesWidgets extends StatelessWidget {
     return Container(
       alignment: Alignment.centerLeft,
       child: Text(
-        'Questao ${index + 1} / $questoesTotal: $questao',
-        style: TextStyle(
+        'Questão ${index + 1} de $questoesTotal: $questao',
+        style: const TextStyle(
           fontSize: 24,
           color: Colors.white,
         ),
