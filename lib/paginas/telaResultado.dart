@@ -25,14 +25,18 @@ class Telaresultado extends StatelessWidget {
           child: Column(
             children: [
               Image.asset(
-                "assets/imagens/trofe.jpg",
+                acertos >= erros
+                    ? "assets/imagens/joinhacima.jpeg"
+                    : "assets/imagens/joinhabaixo.jpg",
                 height: 350,
                 width: 350,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                "Parabéns, você concluiu o Quiz!!",
-                style: TextStyle(
+              const SizedBox(height: 10),
+              Text(
+                acertos >= erros
+                    ? "Parabéns! Você obteve uma otima pontuação"
+                    : "Poxa, parace que você não teve uma boa pontuação :(",
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 25,
                     fontWeight: FontWeight.bold),
@@ -48,6 +52,7 @@ class Telaresultado extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () {
+                    Navigator.pop(context);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Telaquiz()));
                   },

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quiz/paginas/telaResultado.dart';
 import 'package:quiz/paginas/tela_inicial.dart';
 
 void main() => runApp(const Myapp());

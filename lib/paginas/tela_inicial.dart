@@ -24,6 +24,7 @@ class TelaInicial extends StatelessWidget {
           const SizedBox(height: 15),
           TextButton(
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Telaquiz()),

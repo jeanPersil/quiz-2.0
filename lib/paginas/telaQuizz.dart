@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:quiz/models/modeloQuestoes.dart';
 import 'package:quiz/paginas/telaResultado.dart';
@@ -11,49 +12,76 @@ class Telaquiz extends StatefulWidget {
 
 class _TelaquizState extends State<Telaquiz> {
   List<Questoes> questoes = [
-    Questoes(titulo: 'Quem é o ultimo boss de dark souls 3?', opcoes: {
-      'Lotric': false,
-      'Vordit': false,
-      'Soul of Sinder': true,
-      'Gael': false,
-    }),
+    Questoes(
+      titulo: 'Qual é o nome do filho do Kratos na mitologia Nordica',
+      opcoes: {
+        'Calliope': false,
+        'Mimir': false,
+        'Atreus': true,
+        'Antonio': false,
+      },
+      imagemURL: 'assets/imagens/atreus.jpg',
+    ),
+    Questoes(
+      titulo: 'Quem é o primeiro chefe em Dark Souls 3?',
+      opcoes: {
+        'Index Gundyr': true,
+        'Campeão Gundyr': false,
+        'Vordit': false,
+        'Bolsonaro': false,
+      },
+      imagemURL: 'assets/imagens/gundyr.jpg',
+    ),
+    Questoes(
+      titulo:
+          ' Qual o nome do mob em que você tem que matar pra zerar o Minecraft? ',
+      opcoes: {
+        'Herobrine': false,
+        'Enderdragon': true,
+        'Creeper': false,
+        'Enderman': false,
+      },
+      imagemURL: 'assets/imagens/herobrine.jpg',
+    ),
+    Questoes(
+      titulo:
+          'Em The Last of Us, qual é o personagem que é imune ao fungo Cordyceps?',
+      opcoes: {
+        'Joel': false,
+        'leon kennedy': false,
+        'Chris Redfield': false,
+        'Ellie': true,
+      },
+      imagemURL: 'assets/imagens/thelast.jpg',
+    ),
+    Questoes(
+      titulo: 'Quem é o Warwick na serie ARCANE?',
+      opcoes: {
+        'Vi': false,
+        'Aatrox': false,
+        'Wander': true,
+        'Silco': false,
+      },
+      imagemURL: 'assets/imagens/warwick.jpg',
+    ),
     Questoes(
         titulo:
-            'Qual é a maneira correta de declara uma variavel do tipo INTEIRA no flutter?',
-        opcoes: {
-          'int variavel': true,
-          'Int variavel': false,
-          'var variavel': false,
-          'String varivael': false,
-        }),
-    Questoes(titulo: 'Qual é a capital do brasil?', opcoes: {
-      'Salvador': false,
-      'Pernambuco': false,
-      'Brasilia': true,
-      'Estados Unidos': false,
-    }),
-    Questoes(titulo: 'Qual foi o ano da ultima copa do mundo? ', opcoes: {
-      '2022': true,
-      '2018': false,
-      '2014': false,
-      '2020': false,
-    }),
-    Questoes(
-        titulo:
-            'A pessoa que usa tema CLARO no Vscode / discord é deveria estar em um Hospicio.',
+            'Quem usa tema claro no VsCode / Discord definitivamente não é normal.',
         opcoes: {
           'VERDADEIRO': true,
-          'FALSO': false,
-        })
+          'FAlSO': false,
+        },
+        imagemURL: 'assets/imagens/csgo.jpg')
   ];
 
   int indexQuestao = 0;
   double pontuacao = 0;
   double erros = 0;
-  bool foiPressionado = false;
+  bool botao_pressionado = false;
 
-  void proximaQuestao() {
+  void avancar() {
     if (indexQuestao == questoes.length - 1) {
+      Navigator.pop(context);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -61,15 +89,29 @@ class _TelaquizState extends State<Telaquiz> {
                 Telaresultado(acertos: pontuacao, erros: erros)),
       );
     } else {
-      if (foiPressionado) {
+      setState(() {
+        indexQuestao++;
+        botao_pressionado = false;
+      });
+    }
+  }
+
+  void verificar_resposta({required bool resposta_do_usuario}) {
+    if (!botao_pressionado) {
+      if (resposta_do_usuario) {
         setState(() {
-          indexQuestao++;
-          foiPressionado = false;
+          botao_pressionado = true;
+          pontuacao++;
         });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Por favor, selecione uma das opcoes acima")));
+      } else if (!resposta_do_usuario) {
+        setState(() {
+          botao_pressionado = true;
+          erros++;
+        });
       }
+      Timer(const Duration(seconds: 2), () {
+        avancar();
+      });
     }
   }
 
@@ -104,63 +146,44 @@ class _TelaquizState extends State<Telaquiz> {
                 index: indexQuestao,
                 questao: questoes[indexQuestao].titulo,
                 questoesTotal: questoes.length),
+            const SizedBox(height: 15),
+            Image.asset(
+              questoes[indexQuestao].imagemURL,
+              height: 250,
+              width: 800,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 15),
             const Divider(
               color: Colors.white,
             ),
-            const SizedBox(height: 25),
             for (int i = 0; i < questoes[indexQuestao].opcoes.length; i++)
-              ListTile(
-                  title: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          if (foiPressionado) {
-                            return;
-                          }
-                          foiPressionado = true;
-                          if (questoes[indexQuestao]
-                                  .opcoes
-                                  .values
-                                  .toList()[i] ==
-                              true) {
-                            pontuacao++;
-                          } else {
-                            erros++;
-                          }
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: foiPressionado
-                              ? (questoes[indexQuestao]
-                                      .opcoes
-                                      .values
-                                      .toList()[i]
-                                  ? Colors.green
-                                  : Colors.red)
-                              : Colors.white),
-                      child: Text(
-                        questoes[indexQuestao].opcoes.keys.toList()[i],
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.black),
-                      )))
+              Flexible(
+                child: ListTile(
+                    title: ElevatedButton(
+                        onPressed: () => verificar_resposta(
+                            resposta_do_usuario: questoes[indexQuestao]
+                                .opcoes
+                                .values
+                                .toList()[i]),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: botao_pressionado
+                                ? (questoes[indexQuestao]
+                                        .opcoes
+                                        .values
+                                        .toList()[i]
+                                    ? Colors.green
+                                    : Colors.red)
+                                : Colors.white),
+                        child: Text(
+                          questoes[indexQuestao].opcoes.keys.toList()[i],
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.black),
+                        ))),
+              )
           ],
         ),
       ),
-      //floatingActionButton: Botaonext(proximaQuestao: proximaQuestao),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: proximaQuestao,
-          icon: const Icon(
-            Icons.arrow_circle_right_sharp,
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.deepPurple,
-          label: const Text(
-            "PROXIMA QUESTÃO",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                letterSpacing: 3,
-                color: Colors.white),
-          )),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

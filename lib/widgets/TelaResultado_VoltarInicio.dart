@@ -8,6 +8,7 @@ class VoltarInicio extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () {
+          Navigator.pop(context);
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const TelaInicial()));
         },
